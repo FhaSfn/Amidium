@@ -1,0 +1,2157 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AMIDIUM — Conseil en Transformation IT</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,600;0,9..40,700;0,9..40,800&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:    #080c10;
+      --dark:     #0d1117;
+      --surface:  #111820;
+      --border:   #1e2a35;
+      --blue:     #1a7fd4;
+      --blue-glow:#2196f3;
+      --green:    #00c896;
+      --green-dim:#00a07a;
+      --text:     #e8edf2;
+      --muted:    #7a909f;
+      --white:    #ffffff;
+      --grad: linear-gradient(135deg, #1a7fd4 0%, #00c896 100%);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 5vw;
+      height: 70px;
+      background: rgba(8,12,16,0.85);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      background: var(--grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--white); }
+
+    .nav-cta {
+      background: var(--grad);
+      color: var(--white) !important;
+      padding: 0.5rem 1.4rem;
+      border-radius: 4px;
+      font-weight: 600 !important;
+      -webkit-text-fill-color: white !important;
+    }
+
+    /* ─── NAV TOOLS (search, lang, mobile toggle) ─── */
+    .nav-tools {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+    }
+
+    .nav-icon-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--muted);
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+      flex-shrink: 0;
+    }
+    .nav-icon-btn:hover { border-color: var(--blue-glow); color: var(--white); }
+    .nav-icon-btn svg { width: 16px; height: 16px; }
+
+    .lang-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 36px;
+      height: 36px;
+      padding: 0 0.7rem;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--muted);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .lang-toggle:hover { border-color: var(--blue-glow); color: var(--white); }
+    .lang-toggle .lang-current { background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      width: 36px;
+      height: 36px;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .nav-toggle span {
+      display: block;
+      width: 16px;
+      height: 2px;
+      background: var(--text);
+      border-radius: 2px;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+    .nav-toggle.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    .nav-toggle.open span:nth-child(2) { opacity: 0; }
+    .nav-toggle.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+    /* Mobile dropdown menu */
+    .mobile-menu {
+      position: fixed;
+      top: 70px;
+      left: 0; right: 0;
+      background: rgba(8,12,16,0.98);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      padding: 0.5rem 5vw 1.2rem;
+      transform: translateY(-8px);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.25s ease, opacity 0.25s ease;
+      z-index: 99;
+    }
+    .mobile-menu.open {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .mobile-menu a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      padding: 0.9rem 0;
+      border-bottom: 1px solid var(--border);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .mobile-menu a:last-child { border-bottom: none; }
+    .mobile-menu a.nav-cta { text-align: center; margin-top: 0.6rem; border-radius: 5px; padding: 0.8rem; }
+
+    /* Search panel */
+    .search-panel {
+      position: fixed;
+      top: 70px;
+      left: 0; right: 0;
+      background: rgba(8,12,16,0.98);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      padding: 1.2rem 5vw;
+      transform: translateY(-8px);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.25s ease, opacity 0.25s ease;
+      z-index: 99;
+    }
+    .search-panel.open { transform: translateY(0); opacity: 1; pointer-events: auto; }
+
+    .search-input-wrap {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.7rem 1rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .search-input-wrap svg { width: 16px; height: 16px; color: var(--muted); flex-shrink: 0; }
+    .search-input-wrap input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+    }
+    .search-input-wrap input::placeholder { color: var(--muted); }
+
+    .search-results {
+      max-width: 600px;
+      margin: 0.8rem auto 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      max-height: 320px;
+      overflow-y: auto;
+    }
+    .search-result-item {
+      display: block;
+      text-decoration: none;
+      padding: 0.7rem 0.9rem;
+      border-radius: 6px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      transition: border-color 0.2s;
+    }
+    .search-result-item:hover { border-color: var(--blue-glow); }
+    .search-result-item .sr-section {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 0.2rem;
+    }
+    .search-result-item .sr-title { font-size: 0.9rem; font-weight: 600; color: var(--white); margin-bottom: 0.2rem; }
+    .search-result-item .sr-snippet { font-size: 0.8rem; color: var(--muted); line-height: 1.5; }
+    .search-result-item mark { background: rgba(0,200,150,0.35); color: var(--white); border-radius: 2px; }
+    .search-no-results { color: var(--muted); font-size: 0.85rem; text-align: center; padding: 0.8rem 0; max-width: 600px; margin: 0 auto; }
+
+    .search-highlight {
+      animation: searchPulse 1.6s ease;
+    }
+    @keyframes searchPulse {
+      0%   { box-shadow: 0 0 0 2px rgba(0,200,150,0.6); }
+      100% { box-shadow: 0 0 0 2px rgba(0,200,150,0); }
+    }
+
+    /* ─── HERO ─── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 5vw 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #hero-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--green);
+      border: 1px solid rgba(0,200,150,0.3);
+      padding: 0.35rem 1rem;
+      border-radius: 100px;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-eyebrow, #hero h1, #hero .hero-sub, #hero .hero-actions, #hero .scroll-hint {
+      position: relative;
+      z-index: 1;
+    }
+    .hero-eyebrow span { width: 6px; height: 6px; border-radius: 50%; background: var(--green); display: inline-block; }
+
+    /* ─── HERO LOGO ─── */
+    .hero-logo {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 2.2rem;
+    }
+    .hero-logo-icon {
+      width: 96px;
+      height: auto;
+      margin-bottom: 1.1rem;
+      filter: drop-shadow(0 0 26px rgba(26,127,212,0.35)) drop-shadow(0 0 46px rgba(0,200,150,0.18));
+      animation: heroLogoFloat 6s ease-in-out infinite;
+    }
+    @keyframes heroLogoFloat {
+      0%, 100% { transform: translateY(0); }
+      50%      { transform: translateY(-8px); }
+    }
+    .hero-logo-word {
+      font-family: 'DM Sans', sans-serif;
+      font-size: clamp(1.6rem, 3vw, 2.3rem);
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      background: var(--grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    @media (max-width: 600px) {
+      .hero-logo-icon { width: 72px; }
+    }
+
+    h1 {
+      font-family: 'DM Sans', sans-serif;
+      font-size: clamp(2.4rem, 4.8vw, 4.4rem);
+      font-weight: 800;
+      line-height: 1.08;
+      letter-spacing: -0.035em;
+      max-width: 820px;
+      margin-bottom: 1.5rem;
+    }
+
+    h1 em {
+      font-style: normal;
+      background: var(--grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      color: var(--muted);
+      font-size: 1.15rem;
+      max-width: 560px;
+      margin: 0 auto 3rem;
+      font-weight: 400;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--grad);
+      color: white;
+      padding: 0.85rem 2rem;
+      border-radius: 5px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      padding: 0.85rem 2rem;
+      border-radius: 5px;
+      font-weight: 500;
+      font-size: 0.95rem;
+      text-decoration: none;
+      border: 1px solid var(--border);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-outline:hover { border-color: var(--blue-glow); color: var(--white); }
+
+    .scroll-hint {
+      margin-top: 3.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--muted);
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .scroll-hint::after {
+      content: '';
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, var(--muted), transparent);
+      animation: scrollDown 1.8s ease-in-out infinite;
+    }
+    @keyframes scrollDown { 0%,100%{opacity:0.4;transform:translateY(0)} 50%{opacity:1;transform:translateY(6px)} }
+
+    /* ─── SECTIONS COMMON ─── */
+    section { padding: 100px 5vw; }
+
+    .section-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 1rem;
+    }
+
+    .section-index {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.7rem;
+      color: var(--border);
+      letter-spacing: 0.1em;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    h2 {
+      font-family: 'DM Sans', sans-serif;
+      font-size: clamp(1.75rem, 3vw, 2.75rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+    }
+
+    h3 {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: var(--border);
+      margin: 0;
+    }
+
+    /* ─── STATS ─── */
+    #stats {
+      background: var(--dark);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .stats-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .stats-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 4rem;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .stats-header p {
+      color: var(--muted);
+      max-width: 380px;
+      font-size: 0.95rem;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .stat-card {
+      padding: 2.5rem 2rem;
+      border-right: 1px solid var(--border);
+      position: relative;
+      transition: background 0.3s;
+    }
+    .stat-card:last-child { border-right: none; }
+    .stat-card:hover { background: rgba(26,127,212,0.04); }
+
+    .stat-number {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 3rem;
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      margin-bottom: 0.5rem;
+      background: var(--grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .stat-tag {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      font-size: 0.65rem;
+      color: var(--border);
+      font-weight: 600;
+      letter-spacing: 0.1em;
+    }
+
+    /* ─── SERVICES ─── */
+    #services { background: var(--black); }
+
+    .services-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .services-top {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      margin-bottom: 4rem;
+    }
+
+    .services-top p {
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .service-card {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      cursor: default;
+      height: 340px;
+      background: var(--dark);
+      border: 1px solid var(--border);
+      transition: border-color 0.4s, transform 0.4s cubic-bezier(0.23,1,0.32,1), box-shadow 0.4s;
+    }
+    .service-card:hover {
+      border-color: rgba(26,127,212,0.5);
+      transform: translateY(-6px) scale(1.012);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(26,127,212,0.2);
+    }
+
+    /* Image layer */
+    .sc-img {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      transform: scale(1.08);
+      transition: transform 0.7s cubic-bezier(0.23,1,0.32,1), opacity 0.5s;
+      opacity: 0.18;
+      filter: saturate(0.4) brightness(0.7);
+    }
+    .service-card:hover .sc-img {
+      transform: scale(1.0);
+      opacity: 0.7;
+      filter: saturate(0.7) brightness(0.6);
+    }
+
+    /* Gradient overlay */
+    .sc-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        160deg,
+        rgba(8,12,16,0.55) 0%,
+        rgba(8,12,16,0.82) 60%,
+        rgba(8,12,16,0.97) 100%
+      );
+      transition: background 0.5s;
+    }
+    .service-card:hover .sc-overlay {
+      background: linear-gradient(
+        160deg,
+        rgba(8,12,16,0.3) 0%,
+        rgba(8,12,16,0.72) 55%,
+        rgba(8,12,16,0.97) 100%
+      );
+    }
+
+    /* Gradient border glow on hover */
+    .sc-glow {
+      position: absolute;
+      inset: 0;
+      border-radius: 12px;
+      opacity: 0;
+      transition: opacity 0.4s;
+      background: linear-gradient(135deg, rgba(26,127,212,0.12) 0%, rgba(0,200,150,0.08) 100%);
+      pointer-events: none;
+    }
+    .service-card:hover .sc-glow { opacity: 1; }
+
+    /* Top accent line */
+    .sc-line {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, #1a7fd4, #00c896);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.5s cubic-bezier(0.23,1,0.32,1);
+    }
+    .service-card:hover .sc-line { transform: scaleX(1); }
+
+    /* Content wrapper */
+    .sc-content {
+      position: absolute;
+      inset: 0;
+      padding: 2rem 1.8rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    /* Icon */
+    .service-icon {
+      width: 44px;
+      height: 44px;
+      margin-bottom: 1rem;
+      display: block;
+      transition: transform 0.4s cubic-bezier(0.23,1,0.32,1), filter 0.4s;
+    }
+    .service-icon svg { width: 44px; height: 44px; display: block; }
+    .service-card:hover .service-icon {
+      transform: translateY(-3px) scale(1.12);
+      filter: drop-shadow(0 0 8px rgba(0,200,150,0.4));
+    }
+
+    /* Title */
+    .service-card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0;
+      color: var(--white);
+      transition: color 0.3s;
+    }
+
+    /* Description — hidden by default, slides up on hover */
+    .sc-desc {
+      color: var(--muted);
+      font-size: 0.83rem;
+      line-height: 1.65;
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      margin-top: 0;
+      transition: max-height 0.5s cubic-bezier(0.23,1,0.32,1),
+                  opacity 0.4s 0.08s,
+                  margin-top 0.4s;
+    }
+    .service-card:hover .sc-desc {
+      max-height: 120px;
+      opacity: 1;
+      margin-top: 0.6rem;
+    }
+
+    /* Tags */
+    .service-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 0;
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height 0.5s 0.1s cubic-bezier(0.23,1,0.32,1),
+                  opacity 0.4s 0.18s,
+                  margin-top 0.4s 0.1s;
+    }
+    .service-card:hover .service-tags {
+      max-height: 60px;
+      opacity: 1;
+      margin-top: 0.9rem;
+    }
+
+    /* Arrow indicator */
+    .sc-arrow {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transform: translateX(-6px);
+      transition: opacity 0.3s, transform 0.4s cubic-bezier(0.23,1,0.32,1), border-color 0.3s, background 0.3s;
+    }
+    .sc-arrow svg { width: 14px; height: 14px; }
+    .service-card:hover .sc-arrow {
+      opacity: 1;
+      transform: translateX(0);
+      border-color: rgba(0,200,150,0.5);
+      background: rgba(0,200,150,0.08);
+    }
+
+
+    .tag {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      padding: 0.2rem 0.6rem;
+      border-radius: 3px;
+      background: var(--border);
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    /* ─── APPROACH ─── */
+    #approach {
+      background: var(--dark);
+      border-top: 1px solid var(--border);
+    }
+
+    .approach-inner { max-width: 1200px; margin: 0 auto; }
+
+    .approach-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      margin-bottom: 5rem;
+    }
+
+    .approach-header p { color: var(--muted); line-height: 1.75; }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .step {
+      padding: 2rem 1.5rem;
+      border-right: 1px solid var(--border);
+      position: relative;
+      transition: background 0.3s;
+    }
+    .step:last-child { border-right: none; }
+    .step:hover { background: var(--surface); }
+
+    .step-num {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 800;
+      color: var(--border);
+      letter-spacing: 0.12em;
+      margin-bottom: 1.5rem;
+    }
+
+    .step-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--grad);
+      margin-bottom: 1rem;
+    }
+    /* fallback for browsers without conic support */
+    .step:nth-child(odd) .step-dot { background: var(--blue); }
+    .step:nth-child(even) .step-dot { background: var(--green); }
+
+    .step h3 { font-size: 0.95rem; margin-bottom: 0.6rem; color: var(--white); }
+    .step p { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+
+    /* ─── SAP ─── */
+    #sap { background: var(--black); }
+
+    .sap-inner { max-width: 1200px; margin: 0 auto; }
+
+    .sap-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.6fr;
+      gap: 5rem;
+      align-items: start;
+      margin-top: 4rem;
+    }
+
+    .sap-aside p { color: var(--muted); line-height: 1.75; margin-bottom: 2rem; }
+
+    .sap-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--green);
+      background: rgba(0,200,150,0.08);
+      border: 1px solid rgba(0,200,150,0.2);
+      padding: 0.4rem 0.9rem;
+      border-radius: 4px;
+    }
+
+    .sap-modules {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .sap-module {
+      background: var(--dark);
+      padding: 1.8rem 1.6rem;
+      transition: background 0.3s;
+    }
+    .sap-module:hover { background: var(--surface); }
+
+    .sap-module-title {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+      color: var(--white);
+    }
+
+    .sap-module p { font-size: 0.83rem; color: var(--muted); line-height: 1.6; }
+
+    .sap-module .tag { margin-top: 0.8rem; }
+
+    /* ─── IMPACT ─── */
+    #impact {
+      background: var(--dark);
+      border-top: 1px solid var(--border);
+    }
+
+    .impact-inner { max-width: 1200px; margin: 0 auto; }
+
+    .impact-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+      margin-top: 4rem;
+    }
+
+    .impact-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 2rem 1.5rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s;
+    }
+    .impact-card:hover { border-color: var(--blue); }
+
+    .impact-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--grad);
+    }
+
+    .impact-num {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 2.6rem;
+      font-weight: 800;
+      background: var(--grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      margin-bottom: 0.5rem;
+    }
+
+    .impact-label {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+    }
+
+    .impact-desc { font-size: 0.82rem; color: var(--muted); }
+
+    /* ─── CONTACT ─── */
+    #contact {
+      background: var(--black);
+      border-top: 1px solid var(--border);
+    }
+
+    .contact-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 6rem;
+      align-items: start;
+    }
+
+    .contact-left p { color: var(--muted); line-height: 1.75; margin: 1.5rem 0 2.5rem; }
+
+    .contact-info { display: flex; flex-direction: column; gap: 1rem; }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .contact-item strong { color: var(--white); }
+
+    .contact-form { display: flex; flex-direction: column; gap: 1.2rem; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+
+    .form-group label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.92rem;
+      padding: 0.75rem 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color: var(--blue);
+    }
+    .form-group textarea { resize: vertical; min-height: 120px; }
+    .form-group select { appearance: none; cursor: pointer; }
+    .form-group option { background: var(--dark); }
+
+    .form-group input:invalid:not(:placeholder-shown) { border-color: #d4574a; }
+
+    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    .form-status {
+      display: none;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.88rem;
+      font-weight: 500;
+      padding: 0.85rem 1rem;
+      border-radius: 5px;
+      line-height: 1.5;
+    }
+    .form-status.visible { display: flex; }
+    .form-status.success {
+      background: rgba(0,200,150,0.08);
+      border: 1px solid rgba(0,200,150,0.3);
+      color: var(--green);
+    }
+    .form-status.error {
+      background: rgba(212,87,74,0.08);
+      border: 1px solid rgba(212,87,74,0.3);
+      color: #e07a6e;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--dark);
+      border-top: 1px solid var(--border);
+      padding: 3rem 5vw;
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+
+    .footer-logo {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 800;
+      font-size: 1.15rem;
+      letter-spacing: -0.02em;
+      background: var(--grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+    .footer-links a { color: var(--muted); font-size: 0.83rem; text-decoration: none; }
+    .footer-links a:hover { color: var(--white); }
+
+    .footer-copy { color: var(--muted); font-size: 0.8rem; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      .stats-grid,
+      .impact-grid { grid-template-columns: repeat(2, 1fr); }
+      .services-grid,
+      .steps { grid-template-columns: 1fr; }
+      .services-top,
+      .approach-header,
+      .sap-layout,
+      .contact-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+      .sap-modules { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .step { border-right: none; border-bottom: 1px solid var(--border); }
+      .step:last-child { border-bottom: none; }
+      nav .nav-links { display: none; }
+      .nav-toggle { display: flex; }
+    }
+    @media (min-width: 901px) {
+      .mobile-menu { display: none; }
+    }
+
+    @media (max-width: 600px) {
+      .stats-grid,
+      .impact-grid { grid-template-columns: 1fr; }
+      .services-grid { grid-template-columns: 1fr; }
+      section { padding: 70px 5vw; }
+    }
+
+    /* ─── SCROLL ANIMATION ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">AMIDIUM</a>
+  <ul class="nav-links" data-i18n="nav.links">
+    <li><a href="#services" data-i18n="nav.services">Services</a></li>
+    <li><a href="#approach" data-i18n="nav.approach">Approche</a></li>
+    <li><a href="#expertise" data-i18n="nav.expertise">Expertise</a></li>
+    <li><a href="#impact" data-i18n="nav.impact">Impact</a></li>
+    <li><a href="#contact" class="nav-cta" data-i18n="nav.contact">Nous contacter</a></li>
+  </ul>
+  <div class="nav-tools">
+    <button class="nav-icon-btn" id="searchToggle" aria-label="Rechercher">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </button>
+    <button class="lang-toggle" id="langToggle" aria-label="Changer la langue">
+      <span class="lang-current" id="langLabel">EN</span>
+    </button>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#services" data-i18n="nav.services">Services</a>
+  <a href="#approach" data-i18n="nav.approach">Approche</a>
+  <a href="#expertise" data-i18n="nav.expertise">Expertise</a>
+  <a href="#impact" data-i18n="nav.impact">Impact</a>
+  <a href="#contact" class="nav-cta" data-i18n="nav.contact">Nous contacter</a>
+</div>
+
+<!-- SEARCH PANEL -->
+<div class="search-panel" id="searchPanel">
+  <div class="search-input-wrap">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input type="text" id="searchInput" placeholder="Rechercher sur le site…" data-i18n-placeholder="search.placeholder" autocomplete="off" />
+  </div>
+  <div class="search-results" id="searchResults"></div>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+<canvas id="hero-canvas"></canvas>
+  <div class="hero-logo">
+    <svg class="hero-logo-icon" viewBox="-818.6424 43.8745 553.1 480.6399" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="heroLogoGrad" x1="-818.6424" y1="43.8745" x2="-265.5424" y2="524.5144" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#1a7fd4"/>
+          <stop offset="100%" stop-color="#00c896"/>
+        </linearGradient>
+      </defs>
+      <g transform="matrix(1, 0, 0, 1, -909.9524061374723, -898.895521207087)">
+        <path fill="url(#heroLogoGrad)" d="M364.24,1229.42c-25.16,44.53-48.44,85.73-74.88,132.5H610.12l36.19,63.13H179.86c48-83.82,94.83-165.56,145.22-253.56Z" transform="translate(-1.9 -3.59)"/>
+        <path fill="url(#heroLogoGrad)" d="M 327.44 1019.75 C 378.65 1108.54 425.89 1190.42 475.76 1276.8899999999999 L 404.49 1276.8899999999999 L 327.28000000000003 1146.8899999999999 C 272 1242.4 218.67 1334.59 165.21 1427 L 93.21000000000001 1427 Z" transform="translate(-1.9 -3.59)"/>
+        <g>
+          <path fill="url(#heroLogoGrad)" d="M 332.04 1004.41 L 368.79 942.77 L 599.58 1343.41 L 309.91 1343.41 L 339.91 1289.55 L 495.15 1289.55 L 332.04 1004.41 Z" id="object-0"/>
+          <path d="M 199.48 1411.64 C 345.83 1375.64 491.82 1380.13 637.53 1415.55" style="fill: none; stroke: url(#heroLogoGrad); stroke-linecap: round; stroke-linejoin: round; stroke-width: 2px;" id="object-1"/>
+          <path d="M 324.63 1102.65 L 113.43 1411.65" style="fill: none; stroke: url(#heroLogoGrad); stroke-linecap: round; stroke-linejoin: round; stroke-width: 2px;" id="object-2"/>
+          <path d="M 324.63 1028.34 C 331.82 1131.34 382.99 1208.34 465.44 1266.92" style="fill: none; stroke: url(#heroLogoGrad); stroke-linecap: round; stroke-linejoin: round; stroke-width: 2px;" id="object-3"/>
+        </g>
+        <path d="M373.47,953.7q47.89,228.46,219,387.21" transform="translate(-1.9 -3.59)" style="fill: none; stroke: url(#heroLogoGrad); stroke-linecap: round; stroke-linejoin: round; stroke-width: 2px;"/>
+        <path d="M529.92,1309.62l-211.21,31.29" transform="translate(-1.9 -3.59)" style="fill: none; stroke: url(#heroLogoGrad); stroke-linecap: round; stroke-linejoin: round; stroke-width: 2px;"/>
+        <path d="M326.53,1180.55,256.13,1380" transform="translate(-1.9 -3.59)" style="fill: none; stroke: url(#heroLogoGrad); stroke-linecap: round; stroke-linejoin: round; stroke-width: 2px;"/>
+      </g>
+    </svg>
+    <span class="hero-logo-word">AMIDIUM</span>
+  </div>
+  <div class="hero-eyebrow" data-i18n="hero.eyebrow"><span></span> Conseil en Transformation IT · Maroc &amp; International</div>
+  <h1 data-i18n="hero.title">Votre entreprise,<br/><em>transformée</em> par la technologie.</h1>
+  <p class="hero-sub" data-i18n="hero.sub">AMIDIUM accompagne les organisations dans leurs projets IT les plus ambitieux — conseil, intégration, développement et pilotage de la transformation digitale.</p>
+  <div class="hero-actions">
+    <a href="#contact" class="btn-primary" data-i18n="hero.cta1">Démarrer un projet</a>
+    <a href="#services" class="btn-outline" data-i18n="hero.cta2">Nos expertises</a>
+  </div>
+  <div class="scroll-hint" data-i18n="hero.scroll">Défiler</div>
+</section>
+
+<!-- STATS -->
+<section id="stats">
+  <div class="stats-inner">
+    <div class="stats-header reveal">
+      <div>
+        <div class="section-index">//001</div>
+        <div class="section-label" data-i18n="stats.label">Le contexte du marché</div>
+        <h2 data-i18n="stats.title">Pourquoi les projets<br/>IT échouent</h2>
+      </div>
+      <p data-i18n="stats.intro">La majorité des échecs IT ne viennent pas du logiciel — ils viennent d'un manque d'expertise, d'un cadrage insuffisant et d'une déconnexion entre la stratégie et l'exécution. AMIDIUM comble cet écart.</p>
+    </div>
+    <div class="stats-grid reveal">
+      <div class="stat-card">
+        <span class="stat-tag" data-i18n="stats.tag1">MARCHÉ</span>
+        <div class="stat-number">68%</div>
+        <div class="stat-label" data-i18n="stats.desc1">des projets IT dépassent le budget ou les délais prévus initialement</div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-tag" data-i18n="stats.tag2">STRATÉGIE</span>
+        <div class="stat-number">3×</div>
+        <div class="stat-label" data-i18n="stats.desc2">plus de chances de succès avec un partenaire aligné dès le cadrage</div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-tag" data-i18n="stats.tag3">DIGITAL</span>
+        <div class="stat-number">70%</div>
+        <div class="stat-label" data-i18n="stats.desc3">des initiatives de transformation digitale n'atteignent pas leurs objectifs</div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-tag" data-i18n="stats.tag4">ROI</span>
+        <div class="stat-number" data-i18n="stats.num4">2 ans</div>
+        <div class="stat-label" data-i18n="stats.desc4">délai moyen avant retour sur investissement sans accompagnement expert</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="services-inner">
+    <div class="services-top reveal">
+      <div>
+        <div class="section-index">//002</div>
+        <div class="section-label" data-i18n="services.label">Nos expertises</div>
+        <h2 data-i18n="services.title">Des services IT<br/>pensés pour l'impact</h2>
+      </div>
+      <p data-i18n="services.intro">Du conseil stratégique à la mise en œuvre technique, AMIDIUM intervient sur l'ensemble du cycle de vie de vos projets. Nos consultants maîtrisent aussi bien les dimensions fonctionnelles que les enjeux de transformation organisationnelle.</p>
+    </div>
+    <div class="services-grid reveal">
+      <!-- Card 1: Conseil & Stratégie IT -->
+      <div class="service-card">
+        <div class="sc-img" style="background-image:url('https://images.unsplash.com/photo-1552664730-d307ca884978?w=800&q=80')"></div>
+        <div class="sc-overlay"></div>
+        <div class="sc-glow"></div>
+        <div class="sc-line"></div>
+        <div class="sc-arrow"><svg viewBox="0 0 14 14" fill="none"><defs><linearGradient id="arr1" x1="0" y1="0" x2="14" y2="14" gradientUnits="userSpaceOnUse"><stop stop-color="#1a7fd4"/><stop offset="1" stop-color="#00c896"/></linearGradient></defs><path d="M2 12L12 2M12 2H5M12 2v7" stroke="url(#arr1)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="sc-content">
+          <div class="service-icon"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g1" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#1a7fd4"/><stop offset="100%" stop-color="#00c896"/></linearGradient></defs><circle cx="24" cy="24" r="19" stroke="url(#g1)" stroke-width="2"/><circle cx="24" cy="24" r="2.5" fill="url(#g1)"/><path d="M24 5v4M24 39v4M5 24h4M39 24h4" stroke="url(#g1)" stroke-width="2" stroke-linecap="round"/><path d="M20 14l4 10 10-4-4-10-10 4z" stroke="url(#g1)" stroke-width="1.8" stroke-linejoin="round"/></svg></div>
+          <h3 data-i18n="svc1.title">Conseil &amp; Stratégie IT</h3>
+          <p class="sc-desc" data-i18n="svc1.desc">Définition de la feuille de route digitale, schéma directeur SI, analyse des besoins et alignement des investissements technologiques sur les objectifs métier.</p>
+          <div class="service-tags"><span class="tag">Roadmap</span><span class="tag">Architecture</span><span class="tag" data-i18n="svc1.tag3">Gouvernance</span></div>
+        </div>
+      </div>
+      <!-- Card 2: Transformation Digitale -->
+      <div class="service-card">
+        <div class="sc-img" style="background-image:url('https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=80')"></div>
+        <div class="sc-overlay"></div>
+        <div class="sc-glow"></div>
+        <div class="sc-line"></div>
+        <div class="sc-arrow"><svg viewBox="0 0 14 14" fill="none"><defs><linearGradient id="arr2" x1="0" y1="0" x2="14" y2="14" gradientUnits="userSpaceOnUse"><stop stop-color="#1a7fd4"/><stop offset="1" stop-color="#00c896"/></linearGradient></defs><path d="M2 12L12 2M12 2H5M12 2v7" stroke="url(#arr2)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="sc-content">
+          <div class="service-icon"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g2" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#1a7fd4"/><stop offset="100%" stop-color="#00c896"/></linearGradient></defs><path d="M8 24C8 15.16 15.16 8 24 8c5.08 0 9.6 2.3 12.6 5.9" stroke="url(#g2)" stroke-width="2.2" stroke-linecap="round"/><path d="M40 24c0 8.84-7.16 16-16 16-5.08 0-9.6-2.3-12.6-5.9" stroke="url(#g2)" stroke-width="2.2" stroke-linecap="round"/><path d="M33 8l4 6-6 1M15 40l-4-6 6-1" stroke="url(#g2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="24" cy="24" r="4" stroke="url(#g2)" stroke-width="1.8"/></svg></div>
+          <h3 data-i18n="svc2.title">Transformation Digitale</h3>
+          <p class="sc-desc" data-i18n="svc2.desc">Accompagnement des entreprises dans leur mutation numérique — digitalisation des processus, conduite du changement et déploiement de nouveaux usages.</p>
+          <div class="service-tags"><span class="tag">Digitalization</span><span class="tag">Change Mgmt</span><span class="tag">BPM</span></div>
+        </div>
+      </div>
+      <!-- Card 3: Intégration de Systèmes -->
+      <div class="service-card">
+        <div class="sc-img" style="background-image:url('https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=80')"></div>
+        <div class="sc-overlay"></div>
+        <div class="sc-glow"></div>
+        <div class="sc-line"></div>
+        <div class="sc-arrow"><svg viewBox="0 0 14 14" fill="none"><defs><linearGradient id="arr3" x1="0" y1="0" x2="14" y2="14" gradientUnits="userSpaceOnUse"><stop stop-color="#1a7fd4"/><stop offset="1" stop-color="#00c896"/></linearGradient></defs><path d="M2 12L12 2M12 2H5M12 2v7" stroke="url(#arr3)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="sc-content">
+          <div class="service-icon"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g3" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#1a7fd4"/><stop offset="100%" stop-color="#00c896"/></linearGradient></defs><rect x="6" y="6" width="12" height="12" rx="3" stroke="url(#g3)" stroke-width="2"/><rect x="30" y="6" width="12" height="12" rx="3" stroke="url(#g3)" stroke-width="2"/><rect x="6" y="30" width="12" height="12" rx="3" stroke="url(#g3)" stroke-width="2"/><rect x="30" y="30" width="12" height="12" rx="3" stroke="url(#g3)" stroke-width="2"/><circle cx="24" cy="24" r="4" stroke="url(#g3)" stroke-width="2"/><path d="M18 12h6M24 12v6M30 12h-6M36 18v6M36 24v6M30 36h-6M24 36v-6M18 36h6M12 30v-6M12 24v-6" stroke="url(#g3)" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+          <h3 data-i18n="svc3.title">Intégration de Systèmes</h3>
+          <p class="sc-desc" data-i18n="svc3.desc">Conception et déploiement d'architectures d'intégration entre vos applications métier — ERP, CRM, e-commerce, outils SaaS et systèmes legacy.</p>
+          <div class="service-tags"><span class="tag">ERP</span><span class="tag">API</span><span class="tag">Middleware</span><span class="tag">EDI</span></div>
+        </div>
+      </div>
+      <!-- Card 4: Développement Sur Mesure -->
+      <div class="service-card">
+        <div class="sc-img" style="background-image:url('https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=800&q=80')"></div>
+        <div class="sc-overlay"></div>
+        <div class="sc-glow"></div>
+        <div class="sc-line"></div>
+        <div class="sc-arrow"><svg viewBox="0 0 14 14" fill="none"><defs><linearGradient id="arr4" x1="0" y1="0" x2="14" y2="14" gradientUnits="userSpaceOnUse"><stop stop-color="#1a7fd4"/><stop offset="1" stop-color="#00c896"/></linearGradient></defs><path d="M2 12L12 2M12 2H5M12 2v7" stroke="url(#arr4)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="sc-content">
+          <div class="service-icon"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g4" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#1a7fd4"/><stop offset="100%" stop-color="#00c896"/></linearGradient></defs><rect x="6" y="10" width="36" height="28" rx="4" stroke="url(#g4)" stroke-width="2"/><path d="M6 16h36" stroke="url(#g4)" stroke-width="1.5"/><circle cx="11" cy="13" r="1.5" fill="url(#g4)"/><circle cx="16" cy="13" r="1.5" fill="url(#g4)"/><circle cx="21" cy="13" r="1.5" fill="url(#g4)"/><path d="M19 22l-5 5 5 5M29 22l5 5-5 5" stroke="url(#g4)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M25 20l-2 16" stroke="url(#g4)" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+          <h3 data-i18n="svc4.title">Développement Sur Mesure</h3>
+          <p class="sc-desc" data-i18n="svc4.desc">Création d'applications métier, extensions et automatisations adaptées à vos processus — du prototype au déploiement en production.</p>
+          <div class="service-tags"><span class="tag">Web</span><span class="tag">API REST</span><span class="tag">Cloud</span><span class="tag">Mobile</span></div>
+        </div>
+      </div>
+      <!-- Card 5: Cloud & Infrastructure -->
+      <div class="service-card">
+        <div class="sc-img" style="background-image:url('https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=800&q=80')"></div>
+        <div class="sc-overlay"></div>
+        <div class="sc-glow"></div>
+        <div class="sc-line"></div>
+        <div class="sc-arrow"><svg viewBox="0 0 14 14" fill="none"><defs><linearGradient id="arr5" x1="0" y1="0" x2="14" y2="14" gradientUnits="userSpaceOnUse"><stop stop-color="#1a7fd4"/><stop offset="1" stop-color="#00c896"/></linearGradient></defs><path d="M2 12L12 2M12 2H5M12 2v7" stroke="url(#arr5)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="sc-content">
+          <div class="service-icon"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g5" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#1a7fd4"/><stop offset="100%" stop-color="#00c896"/></linearGradient></defs><path d="M34 30a8 8 0 000-16 8 8 0 00-15.3-3A7 7 0 1010 30h24z" stroke="url(#g5)" stroke-width="2" stroke-linejoin="round"/><path d="M18 38v-8M24 38v-8M30 38v-8" stroke="url(#g5)" stroke-width="2" stroke-linecap="round"/><path d="M14 38h20" stroke="url(#g5)" stroke-width="2" stroke-linecap="round"/></svg></div>
+          <h3 data-i18n="svc5.title">Cloud &amp; Infrastructure</h3>
+          <p class="sc-desc" data-i18n="svc5.desc">Migration vers le cloud, modernisation de l'infrastructure, DevOps et sécurisation des environnements hybrides pour plus d'agilité et de résilience.</p>
+          <div class="service-tags"><span class="tag">Azure</span><span class="tag">AWS</span><span class="tag">DevOps</span><span class="tag">SecOps</span></div>
+        </div>
+      </div>
+      <!-- Card 6: Expertise SAP -->
+      <div class="service-card">
+        <div class="sc-img" style="background-image:url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800&q=80')"></div>
+        <div class="sc-overlay"></div>
+        <div class="sc-glow"></div>
+        <div class="sc-line"></div>
+        <div class="sc-arrow"><svg viewBox="0 0 14 14" fill="none"><defs><linearGradient id="arr7" x1="0" y1="0" x2="14" y2="14" gradientUnits="userSpaceOnUse"><stop stop-color="#1a7fd4"/><stop offset="1" stop-color="#00c896"/></linearGradient></defs><path d="M2 12L12 2M12 2H5M12 2v7" stroke="url(#arr7)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="sc-content">
+          <div class="service-icon"><svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g7" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#1a7fd4"/><stop offset="100%" stop-color="#00c896"/></linearGradient></defs><rect x="6" y="8" width="36" height="10" rx="2.5" stroke="url(#g7)" stroke-width="2"/><rect x="6" y="19" width="36" height="10" rx="2.5" stroke="url(#g7)" stroke-width="2"/><rect x="6" y="30" width="36" height="10" rx="2.5" stroke="url(#g7)" stroke-width="2"/><circle cx="12" cy="13" r="1.4" fill="url(#g7)"/><circle cx="12" cy="24" r="1.4" fill="url(#g7)"/><circle cx="12" cy="35" r="1.4" fill="url(#g7)"/></svg></div>
+          <h3 data-i18n="svc6.title">Expertise SAP</h3>
+          <p class="sc-desc" data-i18n="svc6.desc">Conseil, Maintenance, implémentation et développement sur l'ensemble de la suite SAP — S/4HANA, ECC, BTP, Fiori et CPI pour vos projets Finance, RH et Supply Chain.</p>
+          <div class="service-tags"><span class="tag">S/4HANA</span><span class="tag">ECC</span><span class="tag">ABAP</span><span class="tag">Fiori</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- APPROACH -->
+<section id="approach">
+  <div class="approach-inner">
+    <div class="approach-header reveal">
+      <div>
+        <div class="section-index">//003</div>
+        <div class="section-label" data-i18n="approach.label">Notre méthode</div>
+        <h2 data-i18n="approach.title">De la vision<br/>au résultat</h2>
+      </div>
+      <p data-i18n="approach.intro">Chaque projet AMIDIUM suit une séquence éprouvée qui élimine les ambiguïtés dès le départ et maintient l'alignement métier tout au long de la delivery. Pas de zones grises, pas de surprises.</p>
+    </div>
+    <div class="steps reveal">
+      <div class="step">
+        <div class="step-num">//01</div>
+        <div class="step-dot"></div>
+        <h3 data-i18n="step1.title">Diagnostic</h3>
+        <p data-i18n="step1.desc">Audit de l'existant, identification des cas d'usage à fort ROI et cartographie des risques.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">//02</div>
+        <div class="step-dot"></div>
+        <h3 data-i18n="step2.title">Cadrage</h3>
+        <p data-i18n="step2.desc">Définition du périmètre, architecture fonctionnelle et plan de projet détaillé avec jalons.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">//03</div>
+        <div class="step-dot"></div>
+        <h3 data-i18n="step3.title">Développement</h3>
+        <p data-i18n="step3.desc">Cycles itératifs courts, revues de code, tests intégrés et recette avec les équipes métier.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">//04</div>
+        <div class="step-dot"></div>
+        <h3 data-i18n="step4.title">Déploiement</h3>
+        <p data-i18n="step4.desc">Go-live maîtrisé, migration des données, formation des utilisateurs clés et hypercare.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">//05</div>
+        <div class="step-dot"></div>
+        <h3 data-i18n="step5.title">Pérennisation</h3>
+        <p data-i18n="step5.desc">Support post-production, transfert de compétences et optimisation continue du système.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERTISE -->
+<section id="expertise">
+  <div class="sap-inner">
+    <div class="reveal">
+      <div class="section-index">//004</div>
+      <div class="section-label" data-i18n="expertise.label">Domaines d'expertise</div>
+      <h2 data-i18n="expertise.title">Une couverture IT<br/>de bout en bout</h2>
+    </div>
+    <div class="sap-layout reveal">
+      <div class="sap-aside">
+        <p data-i18n="expertise.p1">AMIDIUM intervient sur l'ensemble des technologies qui font tourner les entreprises modernes — des ERP aux plateformes cloud, en passant par les applications métier et les systèmes d'intégration.</p>
+        <p data-i18n="expertise.p2">Nos consultants combinent expertise technique et vision métier pour proposer des solutions qui s'intègrent dans votre réalité opérationnelle, pas dans un idéal théorique.</p>
+        <span class="sap-badge" data-i18n="expertise.badge">✓ Experts certifiés</span>
+      </div>
+      <div class="sap-modules">
+        <div class="sap-module">
+          <div class="sap-module-title" data-i18n="mod1.title">ERP &amp; Progiciels</div>
+          <p data-i18n="mod1.desc">Implémentation et optimisation de solutions ERP (SAP, Odoo, Microsoft Dynamics) pour vos processus Finance, RH, Supply Chain et Production.</p>
+          <div style="display:flex; flex-wrap:wrap; gap:0.4rem; margin-top:0.8rem;">
+            <span class="tag">SAP</span><span class="tag">Odoo</span><span class="tag">Microsoft Dynamics</span><span class="tag">Finance</span><span class="tag">Supply Chain</span><span class="tag">ERP</span>
+          </div>
+        </div>
+        <div class="sap-module">
+          <div class="sap-module-title" data-i18n="mod2.title">Architecture Applicative</div>
+          <p data-i18n="mod2.desc">Conception d'architectures évolutives, microservices, API-first et intégration de systèmes hétérogènes pour des SI agiles et maintenables.</p>
+          <div style="display:flex; flex-wrap:wrap; gap:0.4rem; margin-top:0.8rem;">
+            <span class="tag">Microservices</span><span class="tag">API First</span><span class="tag">Cloud</span><span class="tag">DevOps</span><span class="tag" data-i18n="mod2.tag5">Architecture SI</span><span class="tag" data-i18n="mod2.tag6">Intégration</span>
+          </div>
+        </div>
+        <div class="sap-module">
+          <div class="sap-module-title" data-i18n="mod3.title">Data &amp; Reporting</div>
+          <p data-i18n="mod3.desc">Mise en place de pipelines de données, entrepôts de données, tableaux de bord décisionnels et solutions de BI pour piloter par la donnée.</p>
+          <div style="display:flex; flex-wrap:wrap; gap:0.4rem; margin-top:0.8rem;">
+            <span class="tag">BI</span><span class="tag">Data Warehouse</span><span class="tag">ETL</span><span class="tag">Power BI</span><span class="tag">SAP BW</span><span class="tag" data-i18n="mod3.tag6">Reporting</span>
+          </div>
+        </div>
+        <div class="sap-module">
+          <div class="sap-module-title" data-i18n="mod4.title">Cybersécurité</div>
+          <p data-i18n="mod4.desc">Audit de sécurité, gestion des accès et des identités, conformité réglementaire (ISO 27001, RGPD) et protection des infrastructures critiques.</p>
+          <div style="display:flex; flex-wrap:wrap; gap:0.4rem; margin-top:0.8rem;">
+            <span class="tag">IAM</span><span class="tag">ISO 27001</span><span class="tag">RGPD</span><span class="tag" data-i18n="mod4.tag4">Audit</span><span class="tag">SecOps</span><span class="tag" data-i18n="mod4.tag6">Gestion des accès</span>
+          </div>
+        </div>
+        <div class="sap-module">
+          <div class="sap-module-title" data-i18n="mod5.title">Automatisation &amp; RPA</div>
+          <p data-i18n="mod5.desc">Identification des processus automatisables, déploiement de robots logiciels (RPA) et intégration d'IA pour réduire les tâches à faible valeur ajoutée.</p>
+          <div style="display:flex; flex-wrap:wrap; gap:0.4rem; margin-top:0.8rem;">
+            <span class="tag">RPA</span><span class="tag">IA</span><span class="tag">UiPath</span><span class="tag">Power Automate</span><span class="tag" data-i18n="mod5.tag5">Automatisation</span><span class="tag">Process Mining</span>
+          </div>
+        </div>
+        <div class="sap-module">
+          <div class="sap-module-title" data-i18n="mod6.title">SAP &amp; Solutions Métiere</div>
+          <p data-i18n="mod6.desc">Conseil, implémentation et maintenance sur l'ensemble de la suite SAP : cadrage et migration S/4HANA, maintenance et évolution ECC, développements ABAP sur mesure et interfaces Fiori.</p>
+          <div style="display:flex; flex-wrap:wrap; gap:0.4rem; margin-top:0.8rem;">
+            <span class="tag">SAP</span><span class="tag">S/4HANA</span><span class="tag">ECC</span><span class="tag">ABAP</span><span class="tag">Fiori</span><span class="tag">SAP BTP</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- IMPACT -->
+<section id="impact">
+  <div class="impact-inner">
+    <div class="reveal">
+      <div class="section-index">//005</div>
+      <div class="section-label" data-i18n="impact.label">Nos résultats</div>
+      <h2 data-i18n="impact.title">L'impact<br/>en chiffres</h2>
+    </div>
+    <div class="impact-grid reveal">
+      <div class="impact-card">
+        <div class="impact-num">80+</div>
+        <div class="impact-label" data-i18n="impact1.label">Projets IT livrés</div>
+        <div class="impact-desc" data-i18n="impact1.desc">Missions de conseil, intégration, développement et transformation digitale en contexte national et international.</div>
+      </div>
+      <div class="impact-card">
+        <div class="impact-num">97%</div>
+        <div class="impact-label" data-i18n="impact2.label">Satisfaction client</div>
+        <div class="impact-desc" data-i18n="impact2.desc">Mesuré à la clôture de chaque mission, sur les critères de délai, qualité et adéquation aux besoins métier.</div>
+      </div>
+      <div class="impact-card">
+        <div class="impact-num">-35%</div>
+        <div class="impact-label" data-i18n="impact3.label">Réduction des délais</div>
+        <div class="impact-desc" data-i18n="impact3.desc">Grâce à notre méthode de cadrage en amont, nos outils d'accélération et nos templates éprouvés.</div>
+      </div>
+      <div class="impact-card">
+        <div class="impact-num">15+</div>
+        <div class="impact-label" data-i18n="impact4.label">Consultants experts</div>
+        <div class="impact-desc" data-i18n="impact4.desc">Profils seniors et confirmés, multidisciplinaires, disponibles en régie ou forfait selon vos besoins.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-inner">
+    <div class="contact-left reveal">
+      <div class="section-index">//006</div>
+      <div class="section-label" data-i18n="contact.label">Contact</div>
+      <h2 data-i18n="contact.title">Parlons de<br/>votre projet</h2>
+      <p data-i18n="contact.intro">Que vous ayez un besoin précis ou que vous souhaitiez explorer une opportunité, notre équipe vous répond sous 24h.</p>
+      <div class="contact-info">
+        <div class="contact-item">
+          <span data-i18n="contact.email"><strong>Email :</strong> contact@AMIDIUM.com</span>
+        </div>
+        <div class="contact-item">
+          <span data-i18n="contact.phone"><strong>Tél :</strong> +212 6 00 00 00 00</span>
+        </div>
+        <div class="contact-item">
+          <span data-i18n="contact.office1"><strong>Bureau 1 :</strong> Casablanca, Maroc</span>
+        </div>
+        <div class="contact-item">
+          <span data-i18n="contact.office2"><strong>Bureau 2 :</strong> Paris, France</span>
+        </div>
+      </div>
+    </div>
+    <form class="contact-form reveal" id="contactForm" novalidate>
+      <!-- Configuration FormSubmit (aucun backend requis) -->
+      <input type="hidden" name="_subject" value="Nouvelle demande — Site AMIDIUM" />
+      <input type="hidden" name="_template" value="table" />
+      <input type="hidden" name="_captcha" value="false" />
+      <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" />
+
+      <div class="form-row">
+        <div class="form-group">
+          <label data-i18n="form.name">Prénom &amp; Nom</label>
+          <input type="text" name="name" placeholder="Jean Dupont" data-i18n-placeholder="form.name.ph" required />
+        </div>
+        <div class="form-group">
+          <label data-i18n="form.company">Société</label>
+          <input type="text" name="company" placeholder="Mon Entreprise SA" data-i18n-placeholder="form.company.ph" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label data-i18n="form.emailLabel">Email professionnel</label>
+        <input type="email" name="email" placeholder="jean@entreprise.com" required />
+      </div>
+      <div class="form-group">
+        <label data-i18n="form.need">Besoin</label>
+        <select name="besoin" required>
+          <option value="" data-i18n="form.select">Sélectionnez un domaine</option>
+          <option data-i18n="svc1.title">Conseil &amp; Stratégie IT</option>
+          <option data-i18n="svc2.title">Transformation Digitale</option>
+          <option data-i18n="form.opt3">Intégration de Systèmes / ERP</option>
+          <option data-i18n="svc4.title">Développement Sur Mesure</option>
+          <option data-i18n="svc5.title">Cloud &amp; Infrastructure</option>
+          <option data-i18n="form.opt6">Data &amp; Business Intelligence</option>
+          <option data-i18n="mod4.title">Cybersécurité</option>
+          <option data-i18n="mod5.title">Automatisation &amp; RPA</option>
+          <option data-i18n="form.opt9">Support &amp; TMA</option>
+          <option data-i18n="svc6.title">Expertise SAP</option>
+          <option data-i18n="form.other">Autre</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label data-i18n="form.message">Message</label>
+        <textarea name="message" placeholder="Décrivez votre projet, contexte ou question…" data-i18n-placeholder="form.message.ph" required></textarea>
+      </div>
+      <div class="form-status" id="formStatus" role="status" aria-live="polite"></div>
+      <button type="submit" class="btn-primary" id="contactSubmit" style="width:100%;border:none;cursor:pointer;font-size:1rem;padding:1rem;" data-i18n="form.submit">
+        Envoyer la demande →
+      </button>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <span class="footer-logo">AMIDIUM</span>
+    <ul class="footer-links">
+      <li><a href="#services" data-i18n="nav.services">Services</a></li>
+      <li><a href="#approach" data-i18n="nav.approach">Approche</a></li>
+      <li><a href="#expertise" data-i18n="nav.expertise">Expertise</a></li>
+      <li><a href="#contact" data-i18n="footer.contact">Contact</a></li>
+    </ul>
+    <span class="footer-copy" data-i18n="footer.copy">© 2026 AMIDIUM. Tous droits réservés.</span>
+  </div>
+</footer>
+
+<script>
+  // ─── HERO CANVAS ANIMATION ───
+  (function() {
+    const canvas = document.getElementById('hero-canvas');
+    const ctx = canvas.getContext('2d');
+    const hero = document.getElementById('hero');
+
+    let W, H, mouse = { x: -999, y: -999 }, targetMouse = { x: -999, y: -999 };
+
+    function resize() {
+      W = canvas.width  = hero.offsetWidth;
+      H = canvas.height = hero.offsetHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    // Track mouse only inside hero
+    hero.addEventListener('mousemove', e => {
+      const r = hero.getBoundingClientRect();
+      targetMouse.x = e.clientX - r.left;
+      targetMouse.y = e.clientY - r.top;
+    });
+    hero.addEventListener('mouseleave', () => {
+      targetMouse.x = W / 2;
+      targetMouse.y = H / 2;
+    });
+    targetMouse.x = mouse.x = W / 2;
+    targetMouse.y = mouse.y = H / 2;
+
+    // Floating orbs
+    const orbs = [
+      { x: 0.28, y: 0.45, r: 260, cr: 0, cg: 120, cb: 210, a: 0.13, speed: 0.00018, phase: 0.0 },
+      { x: 0.72, y: 0.55, r: 220, cr: 0, cg: 200, cb: 150, a: 0.11, speed: 0.00024, phase: 2.1 },
+      { x: 0.50, y: 0.30, r: 180, cr: 26, cg: 127, cb: 212, a: 0.09, speed: 0.00020, phase: 4.3 },
+      { x: 0.15, y: 0.75, r: 150, cr: 0, cg: 200, cb: 150, a: 0.07, speed: 0.00015, phase: 1.5 },
+      { x: 0.85, y: 0.20, r: 170, cr: 20, cg: 100, cb: 220, a: 0.08, speed: 0.00022, phase: 3.7 },
+    ];
+
+    // Cursor glow trail
+    const trail = [];
+    const TRAIL_LEN = 28;
+
+    // Particle sparks
+    const sparks = Array.from({ length: 38 }, () => makeSpark());
+    function makeSpark() {
+      return {
+        x: Math.random() * (W || 1200),
+        y: Math.random() * (H || 700),
+        vx: (Math.random() - 0.5) * 0.35,
+        vy: (Math.random() - 0.5) * 0.35,
+        r: Math.random() * 1.4 + 0.3,
+        a: Math.random() * 0.5 + 0.1,
+        t: Math.random() > 0.5 ? 'blue' : 'green',
+        life: Math.random(),
+        lifeSpeed: 0.002 + Math.random() * 0.003,
+      };
+    }
+
+    let t = 0;
+    function draw(ts) {
+      t = ts;
+      ctx.clearRect(0, 0, W, H);
+
+      // Smooth mouse lerp
+      mouse.x += (targetMouse.x - mouse.x) * 0.06;
+      mouse.y += (targetMouse.y - mouse.y) * 0.06;
+
+      // ── Ambient orbs (floating) ──
+      orbs.forEach(o => {
+        const dx = Math.sin(ts * o.speed + o.phase) * 0.06;
+        const dy = Math.cos(ts * o.speed * 0.7 + o.phase) * 0.04;
+        const cx = (o.x + dx) * W;
+        const cy = (o.y + dy) * H;
+
+        // Orb attracted slightly toward cursor
+        const pull = 0.04;
+        const ox = cx + (mouse.x - W/2) * pull;
+        const oy = cy + (mouse.y - H/2) * pull;
+
+        const g = ctx.createRadialGradient(ox, oy, 0, ox, oy, o.r);
+        g.addColorStop(0, `rgba(${o.cr},${o.cg},${o.cb},${o.a})`);
+        g.addColorStop(0.5, `rgba(${o.cr},${o.cg},${o.cb},${o.a * 0.4})`);
+        g.addColorStop(1,   `rgba(${o.cr},${o.cg},${o.cb},0)`);
+        ctx.beginPath();
+        ctx.arc(ox, oy, o.r, 0, Math.PI * 2);
+        ctx.fillStyle = g;
+        ctx.fill();
+      });
+
+      // ── Cursor glow ──
+      trail.push({ x: mouse.x, y: mouse.y });
+      if (trail.length > TRAIL_LEN) trail.shift();
+
+      // Draw trail segments
+      for (let i = 1; i < trail.length; i++) {
+        const frac = i / TRAIL_LEN;
+        const r = Math.round(26 + (0 - 26) * frac);
+        const g = Math.round(127 + (200 - 127) * frac);
+        const b = Math.round(212 + (150 - 212) * frac);
+        ctx.beginPath();
+        ctx.moveTo(trail[i-1].x, trail[i-1].y);
+        ctx.lineTo(trail[i].x, trail[i].y);
+        ctx.strokeStyle = `rgba(${r},${g},${b},${frac * 0.45})`;
+        ctx.lineWidth = frac * 3.5;
+        ctx.lineCap = 'round';
+        ctx.stroke();
+      }
+
+      // Cursor orb glow
+      if (mouse.x > 0) {
+        const cg1 = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 130);
+        cg1.addColorStop(0,   'rgba(26,127,212,0.18)');
+        cg1.addColorStop(0.4, 'rgba(0,200,150,0.10)');
+        cg1.addColorStop(1,   'rgba(0,200,150,0)');
+        ctx.beginPath();
+        ctx.arc(mouse.x, mouse.y, 130, 0, Math.PI * 2);
+        ctx.fillStyle = cg1;
+        ctx.fill();
+
+        // Inner bright core
+        const cg2 = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 18);
+        cg2.addColorStop(0, 'rgba(100,210,255,0.55)');
+        cg2.addColorStop(1, 'rgba(100,210,255,0)');
+        ctx.beginPath();
+        ctx.arc(mouse.x, mouse.y, 18, 0, Math.PI * 2);
+        ctx.fillStyle = cg2;
+        ctx.fill();
+      }
+
+      // ── Floating sparks ──
+      sparks.forEach((s, i) => {
+        s.x += s.vx;
+        s.y += s.vy;
+        s.life += s.lifeSpeed;
+
+        // Subtle drift toward cursor
+        const dxc = mouse.x - s.x;
+        const dyc = mouse.y - s.y;
+        const dist = Math.sqrt(dxc*dxc + dyc*dyc);
+        if (dist < 200) {
+          s.vx += dxc / dist * 0.012;
+          s.vy += dyc / dist * 0.012;
+        }
+        // Dampen velocity
+        s.vx *= 0.995;
+        s.vy *= 0.995;
+
+        // Pulse alpha
+        const alpha = s.a * (0.5 + 0.5 * Math.sin(s.life * Math.PI * 2));
+        const col = s.t === 'blue' ? `rgba(80,160,255,${alpha})` : `rgba(0,210,160,${alpha})`;
+
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = col;
+        ctx.fill();
+
+        // Respawn if out of bounds or life cycle done
+        if (s.x < -10 || s.x > W+10 || s.y < -10 || s.y > H+10 || s.life > 1) {
+          sparks[i] = { ...makeSpark(), x: Math.random() * W, y: Math.random() * H };
+        }
+      });
+
+      requestAnimationFrame(draw);
+    }
+
+    requestAnimationFrame(draw);
+  })();
+
+
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Nav active link highlight on scroll
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 100) current = s.id;
+    });
+    navLinks.forEach(a => {
+      a.style.color = a.getAttribute('href') === '#' + current ? 'var(--white)' : '';
+    });
+  });
+
+  // ─── MOBILE MENU ───
+  (function () {
+    const navToggle = document.getElementById('navToggle');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const searchToggle = document.getElementById('searchToggle');
+    const searchPanel = document.getElementById('searchPanel');
+
+    function closeSearch() {
+      searchPanel.classList.remove('open');
+      searchToggle.classList.remove('open');
+    }
+    function closeMenu() {
+      mobileMenu.classList.remove('open');
+      navToggle.classList.remove('open');
+    }
+
+    navToggle.addEventListener('click', () => {
+      const willOpen = !mobileMenu.classList.contains('open');
+      closeSearch();
+      mobileMenu.classList.toggle('open', willOpen);
+      navToggle.classList.toggle('open', willOpen);
+    });
+
+    searchToggle.addEventListener('click', () => {
+      const willOpen = !searchPanel.classList.contains('open');
+      closeMenu();
+      searchPanel.classList.toggle('open', willOpen);
+      searchToggle.classList.toggle('open', willOpen);
+      if (willOpen) setTimeout(() => document.getElementById('searchInput').focus(), 260);
+    });
+
+    mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+
+    document.addEventListener('click', (e) => {
+      if (!mobileMenu.contains(e.target) && !navToggle.contains(e.target)) closeMenu();
+      if (!searchPanel.contains(e.target) && !searchToggle.contains(e.target)) closeSearch();
+    });
+  })();
+
+  // ─── SITE SEARCH ───
+  (function () {
+    const searchInput = document.getElementById('searchInput');
+    const resultsBox = document.getElementById('searchResults');
+    const searchPanel = document.getElementById('searchPanel');
+    const searchToggle = document.getElementById('searchToggle');
+
+    const sectionLabels = {
+      hero: { fr: 'Accueil', en: 'Home' },
+      stats: { fr: 'Contexte', en: 'Market' },
+      services: { fr: 'Services', en: 'Services' },
+      approach: { fr: 'Approche', en: 'Approach' },
+      expertise: { fr: 'Expertise', en: 'Expertise' },
+      impact: { fr: 'Impact', en: 'Impact' },
+      contact: { fr: 'Contact', en: 'Contact' }
+    };
+
+    function buildIndex() {
+      const items = [];
+      const groups = [
+        '.service-card', '.sap-module', '.step', '.impact-card', '.stat-card'
+      ];
+      groups.forEach(sel => {
+        document.querySelectorAll(sel).forEach(el => {
+          const titleEl = el.querySelector('h3, .sap-module-title, .impact-label, .stat-number');
+          const descEl = el.querySelector('.sc-desc, p, .impact-desc, .stat-label');
+          const title = titleEl ? titleEl.textContent.trim() : '';
+          const desc = descEl ? descEl.textContent.trim() : '';
+          const sectionEl = el.closest('section[id]');
+          items.push({
+            el, title, desc,
+            sectionId: sectionEl ? sectionEl.id : ''
+          });
+        });
+      });
+      // Hero + contact as whole-section items
+      ['hero', 'contact'].forEach(id => {
+        const sectionEl = document.getElementById(id);
+        if (sectionEl) {
+          const h = sectionEl.querySelector('h1, h2');
+          const p = sectionEl.querySelector('p');
+          items.push({
+            el: sectionEl,
+            title: h ? h.textContent.trim() : id,
+            desc: p ? p.textContent.trim() : '',
+            sectionId: id
+          });
+        }
+      });
+      return items;
+    }
+
+    function highlight(text, query) {
+      const idx = text.toLowerCase().indexOf(query.toLowerCase());
+      if (idx === -1) return text.slice(0, 110);
+      const start = Math.max(0, idx - 30);
+      const end = Math.min(text.length, idx + query.length + 60);
+      let snippet = (start > 0 ? '…' : '') + text.slice(start, end) + (end < text.length ? '…' : '');
+      const re = new RegExp('(' + query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'ig');
+      return snippet.replace(re, '<mark>$1</mark>');
+    }
+
+    function runSearch(query) {
+      resultsBox.innerHTML = '';
+      if (!query || query.trim().length < 2) return;
+      const lang = document.documentElement.getAttribute('data-lang') || 'fr';
+      const q = query.trim();
+      const items = buildIndex();
+      const matches = items.filter(it =>
+        it.title.toLowerCase().includes(q.toLowerCase()) ||
+        it.desc.toLowerCase().includes(q.toLowerCase())
+      ).slice(0, 8);
+
+      if (matches.length === 0) {
+        const div = document.createElement('div');
+        div.className = 'search-no-results';
+        div.textContent = lang === 'en' ? `No results for "${q}"` : `Aucun résultat pour « ${q} »`;
+        resultsBox.appendChild(div);
+        return;
+      }
+
+      matches.forEach(m => {
+        const a = document.createElement('a');
+        a.href = '#';
+        a.className = 'search-result-item';
+        const secLabel = sectionLabels[m.sectionId] ? sectionLabels[m.sectionId][lang] : '';
+        const baseText = m.title.toLowerCase().includes(q.toLowerCase()) ? m.title : m.desc;
+        a.innerHTML = `<div class="sr-section">${secLabel}</div><div class="sr-title">${m.title}</div><div class="sr-snippet">${highlight(baseText, q)}</div>`;
+        a.addEventListener('click', (e) => {
+          e.preventDefault();
+          m.el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          m.el.classList.remove('search-highlight');
+          void m.el.offsetWidth;
+          m.el.classList.add('search-highlight');
+          searchPanel.classList.remove('open');
+          searchToggle.classList.remove('open');
+        });
+        resultsBox.appendChild(a);
+      });
+    }
+
+    searchInput.addEventListener('input', (e) => runSearch(e.target.value));
+    searchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const first = resultsBox.querySelector('.search-result-item');
+        if (first) first.click();
+      }
+      if (e.key === 'Escape') {
+        searchPanel.classList.remove('open');
+        searchToggle.classList.remove('open');
+      }
+    });
+  })();
+
+  // ─── EN / FR TRANSLATION ───
+  (function () {
+    const translations = {
+      'nav.services': 'Services',
+      'nav.approach': 'Approach',
+      'nav.expertise': 'Expertise',
+      'nav.impact': 'Impact',
+      'nav.contact': 'Contact us',
+
+      'hero.eyebrow': '<span></span> IT Transformation Consulting · Morocco &amp; International',
+      'hero.title': 'Your business,<br/><em>transformed</em> by technology.',
+      'hero.sub': 'AMIDIUM supports organizations in their most ambitious IT projects — consulting, integration, development and digital transformation management.',
+      'hero.cta1': 'Start a project',
+      'hero.cta2': 'Our expertise',
+      'hero.scroll': 'Scroll',
+
+      'stats.label': 'Market context',
+      'stats.title': 'Why IT projects<br/>fail',
+      'stats.intro': "Most IT failures don't come from the software itself — they come from a lack of expertise, insufficient scoping and a disconnect between strategy and execution. AMIDIUM bridges that gap.",
+      'stats.tag1': 'MARKET',
+      'stats.desc1': 'of IT projects exceed their initial budget or timeline',
+      'stats.tag2': 'STRATEGY',
+      'stats.desc2': 'more likely to succeed with a partner aligned from the scoping stage',
+      'stats.tag3': 'DIGITAL',
+      'stats.desc3': 'of digital transformation initiatives fail to meet their goals',
+      'stats.tag4': 'ROI',
+      'stats.num4': '2 years',
+      'stats.desc4': 'average time to return on investment without expert support',
+
+      'services.label': 'Our expertise',
+      'services.title': "IT services<br/>designed for impact",
+      'services.intro': 'From strategic consulting to technical implementation, AMIDIUM operates across the entire lifecycle of your projects. Our consultants master both functional dimensions and organizational transformation challenges.',
+
+      'svc1.title': 'IT Consulting &amp; Strategy',
+      'svc1.desc': 'Defining the digital roadmap, IT master plan, needs analysis and alignment of technology investments with business goals.',
+      'svc1.tag3': 'Governance',
+
+      'svc2.title': 'Digital Transformation',
+      'svc2.desc': 'Supporting companies through their digital shift — process digitization, change management and rollout of new ways of working.',
+
+      'svc3.title': 'Systems Integration',
+      'svc3.desc': 'Design and deployment of integration architectures across your business applications — ERP, CRM, e-commerce, SaaS tools and legacy systems.',
+
+      'svc4.title': 'Custom Development',
+      'svc4.desc': 'Building business applications, extensions and automations tailored to your processes — from prototype to production deployment.',
+
+      'svc5.title': 'Cloud &amp; Infrastructure',
+      'svc5.desc': 'Cloud migration, infrastructure modernization, DevOps and hybrid environment security for greater agility and resilience.',
+
+      'svc6.title': 'SAP Expertise',
+      'svc6.desc': 'Consulting, maintenance, implementation and development across the full SAP suite — S/4HANA, ECC, BTP, Fiori and CPI for your Finance, HR and Supply Chain projects.',
+
+      'approach.label': 'Our method',
+      'approach.title': 'From vision<br/>to results',
+      'approach.intro': 'Every AMIDIUM project follows a proven sequence that removes ambiguity from the start and keeps business alignment throughout delivery. No grey areas, no surprises.',
+
+      'step1.title': 'Diagnostic',
+      'step1.desc': 'Audit of the current setup, identification of high-ROI use cases and risk mapping.',
+      'step2.title': 'Scoping',
+      'step2.desc': 'Defining the scope, functional architecture and a detailed project plan with milestones.',
+      'step3.title': 'Development',
+      'step3.desc': 'Short iterative cycles, code reviews, integrated testing and acceptance with business teams.',
+      'step4.title': 'Deployment',
+      'step4.desc': 'Controlled go-live, data migration, key user training and hypercare support.',
+      'step5.title': 'Sustainability',
+      'step5.desc': 'Post-production support, knowledge transfer and continuous system optimization.',
+
+      'expertise.label': 'Areas of expertise',
+      'expertise.title': 'End-to-end<br/>IT coverage',
+      'expertise.p1': 'AMIDIUM works across all the technologies that power modern businesses — from ERPs to cloud platforms, business applications and integration systems.',
+      'expertise.p2': 'Our consultants combine technical expertise with business vision to deliver solutions that fit your operational reality, not a theoretical ideal.',
+      'expertise.badge': '✓ Certified experts',
+
+      'mod1.title': 'ERP &amp; Business Software',
+      'mod1.desc': 'Implementation and optimization of ERP solutions (SAP, Odoo, Microsoft Dynamics) for your Finance, HR, Supply Chain and Production processes.',
+
+      'mod2.title': 'Application Architecture',
+      'mod2.desc': 'Design of scalable architectures, microservices, API-first approaches and integration of heterogeneous systems for agile, maintainable IT.',
+      'mod2.tag5': 'IT Architecture',
+      'mod2.tag6': 'Integration',
+
+      'mod3.title': 'Data &amp; Reporting',
+      'mod3.desc': 'Building data pipelines, data warehouses, decision-making dashboards and BI solutions to drive data-based management.',
+      'mod3.tag6': 'Reporting',
+
+      'mod4.title': 'Cybersecurity',
+      'mod4.desc': 'Security audits, identity and access management, regulatory compliance (ISO 27001, GDPR) and protection of critical infrastructure.',
+      'mod4.tag4': 'Audit',
+      'mod4.tag6': 'Access Management',
+
+      'mod5.title': 'Automation &amp; RPA',
+      'mod5.desc': 'Identifying automatable processes, deploying software robots (RPA) and integrating AI to reduce low-value tasks.',
+      'mod5.tag5': 'Automation',
+
+      'mod6.title': 'SAP &amp; Business Solutions',
+      'mod6.desc': 'Consulting, implementation and maintenance across the full SAP suite: S/4HANA scoping and migration, ECC maintenance and evolution, custom ABAP development and Fiori interfaces.',
+
+      'impact.label': 'Our results',
+      'impact.title': 'Impact<br/>by the numbers',
+
+      'impact1.label': 'IT projects delivered',
+      'impact1.desc': 'Consulting, integration, development and digital transformation engagements, nationally and internationally.',
+      'impact2.label': 'Client satisfaction',
+      'impact2.desc': 'Measured at the close of every engagement, based on timeline, quality and fit with business needs.',
+      'impact3.label': 'Reduced timelines',
+      'impact3.desc': 'Thanks to our upfront scoping method, our acceleration tools and our proven templates.',
+      'impact4.label': 'Expert consultants',
+      'impact4.desc': 'Senior and experienced, multidisciplinary profiles, available on a time-and-materials or fixed-price basis.',
+
+      'contact.label': 'Contact',
+      'contact.title': "Let's talk about<br/>your project",
+      'contact.intro': "Whether you have a specific need or want to explore an opportunity, our team will get back to you within 24 hours.",
+      'contact.email': '<strong>Email:</strong> contact@AMIDIUM.com',
+      'contact.phone': '<strong>Phone:</strong> +212 6 00 00 00 00',
+      'contact.office1': '<strong>Office 1:</strong> Casablanca, Morocco',
+      'contact.office2': '<strong>Office 2:</strong> Paris, France',
+
+      'form.name': 'Full name',
+      'form.name.ph': 'John Smith',
+      'form.company': 'Company',
+      'form.company.ph': 'My Company Ltd',
+      'form.emailLabel': 'Work email',
+      'form.need': 'What do you need?',
+      'form.select': 'Select an area',
+      'form.opt3': 'Systems Integration / ERP',
+      'form.opt6': 'Data &amp; Business Intelligence',
+      'form.opt9': 'Support &amp; Maintenance',
+      'form.other': 'Other',
+      'form.message': 'Message',
+      'form.message.ph': 'Describe your project, context or question…',
+      'form.submit': 'Send request →',
+      'form.sending': 'Sending…',
+      'form.success': 'Thank you! Your request has been sent. Our team will get back to you within 24 hours.',
+      'form.error': 'Something went wrong. Please try again or email us directly at contact@AMIDIUM.com.',
+      'form.required': 'Please fill in all required fields.',
+
+      'footer.contact': 'Contact',
+      'footer.copy': '© 2026 AMIDIUM. All rights reserved.',
+
+      'search.placeholder': 'Search the site…'
+    };
+
+    const els = document.querySelectorAll('[data-i18n]');
+    const originals = new Map();
+    els.forEach(el => originals.set(el, el.innerHTML));
+
+    const phEls = document.querySelectorAll('[data-i18n-placeholder]');
+    const originalPh = new Map();
+    phEls.forEach(el => originalPh.set(el, el.getAttribute('placeholder')));
+
+    const langToggle = document.getElementById('langToggle');
+    const langLabel = document.getElementById('langLabel');
+    let currentLang = 'fr';
+
+    function applyLang(lang) {
+      currentLang = lang;
+      document.documentElement.setAttribute('data-lang', lang);
+      document.documentElement.setAttribute('lang', lang === 'en' ? 'en' : 'fr');
+
+      els.forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (lang === 'en' && translations[key]) {
+          el.innerHTML = translations[key];
+        } else {
+          el.innerHTML = originals.get(el);
+        }
+      });
+
+      phEls.forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (lang === 'en' && translations[key]) {
+          el.setAttribute('placeholder', translations[key]);
+        } else {
+          el.setAttribute('placeholder', originalPh.get(el));
+        }
+      });
+
+      langLabel.textContent = lang === 'en' ? 'FR' : 'EN';
+      langToggle.setAttribute('aria-label', lang === 'en' ? 'Passer en français' : 'Switch to English');
+      document.getElementById('searchInput').setAttribute('placeholder',
+        lang === 'en' ? translations['search.placeholder'] : 'Rechercher sur le site…');
+    }
+
+    langToggle.addEventListener('click', () => {
+      applyLang(currentLang === 'fr' ? 'en' : 'fr');
+    });
+  })();
+
+  // ─── FORMULAIRE DE CONTACT ───
+  (function () {
+    const form = document.getElementById('contactForm');
+    const submitBtn = document.getElementById('contactSubmit');
+    const statusBox = document.getElementById('formStatus');
+    const FORM_ENDPOINT = 'https://formsubmit.co/ajax/sfrzart@gmail.com'; // 'https://formsubmit.co/ajax/contact@AMIDIUM.com';
+
+    function currentLang() {
+      return document.documentElement.getAttribute('data-lang') || 'fr';
+    }
+
+    function statusLabel(key) {
+      return currentLang() === 'en' ? enStatusText[key] : frStatusText[key];
+    }
+
+    const frStatusText = {
+      sending: 'Envoi en cours…',
+      success: 'Merci ! Votre demande a bien été envoyée. Notre équipe vous répond sous 24h.',
+      error: "Une erreur s'est produite. Merci de réessayer ou de nous écrire directement à contact@AMIDIUM.com.",
+      required: 'Merci de remplir tous les champs obligatoires.'
+    };
+    const enStatusText = {
+      sending: 'Sending…',
+      success: 'Thank you! Your request has been sent. Our team will get back to you within 24 hours.',
+      error: 'Something went wrong. Please try again or email us directly at contact@AMIDIUM.com.',
+      required: 'Please fill in all required fields.'
+    };
+
+    function showStatus(type, key) {
+      statusBox.textContent = statusLabel(key);
+      statusBox.className = 'form-status visible ' + type;
+    }
+    function hideStatus() {
+      statusBox.className = 'form-status';
+      statusBox.textContent = '';
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideStatus();
+
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        showStatus('error', 'required');
+        return;
+      }
+
+      const originalLabel = submitBtn.innerHTML;
+      submitBtn.disabled = true;
+      submitBtn.textContent = statusLabel('sending');
+
+      try {
+        const formData = new FormData(form);
+        const res = await fetch(FORM_ENDPOINT, {
+          method: 'POST',
+          headers: { 'Accept': 'application/json' },
+          body: formData
+        });
+
+        if (res.ok) {
+          showStatus('success', 'success');
+          form.reset();
+        } else {
+          showStatus('error', 'error');
+        }
+      } catch (err) {
+        showStatus('error', 'error');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalLabel;
+      }
+    });
+  })();
+</script>
+</body>
+</html>
