@@ -2084,7 +2084,7 @@
     const form = document.getElementById('contactForm');
     const submitBtn = document.getElementById('contactSubmit');
     const statusBox = document.getElementById('formStatus');
-    const FORM_ENDPOINT = 'https://formsubmit.co/ajax/sfrzart@gmail.com'; // 'https://formsubmit.co/ajax/contact@AMIDIUM.com';
+    const FORM_ENDPOINT = 'https://formsubmit.co/ajax/contact@amidium.com';
 
     function currentLang() {
       return document.documentElement.getAttribute('data-lang') || 'fr';
@@ -2097,13 +2097,13 @@
     const frStatusText = {
       sending: 'Envoi en cours…',
       success: 'Merci ! Votre demande a bien été envoyée. Notre équipe vous répond sous 24h.',
-      error: "Une erreur s'est produite. Merci de réessayer ou de nous écrire directement à contact@AMIDIUM.com.",
+      error: "Une erreur s'est produite. Merci de réessayer.",
       required: 'Merci de remplir tous les champs obligatoires.'
     };
     const enStatusText = {
       sending: 'Sending…',
       success: 'Thank you! Your request has been sent. Our team will get back to you within 24 hours.',
-      error: 'Something went wrong. Please try again or email us directly at contact@AMIDIUM.com.',
+      error: 'Something went wrong. Please try again.',
       required: 'Please fill in all required fields.'
     };
 
